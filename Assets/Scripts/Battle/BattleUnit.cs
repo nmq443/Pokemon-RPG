@@ -7,9 +7,18 @@ using UnityEngine.Rendering;
 
 public class BattleUnit : MonoBehaviour
 {
-    [SerializeField] PokemonBase _base;
-    [SerializeField] int level;
     [SerializeField] bool isPlayerUnit;
+    [SerializeField] BattleHud hud;
+
+    public bool IsPlayerUnit
+    {
+        get { return isPlayerUnit; }
+    }
+
+    public BattleHud Hud
+    {
+        get { return hud; }
+    }
 
     public Pokemon Pokemon { get; set; }
 
@@ -24,14 +33,17 @@ public class BattleUnit : MonoBehaviour
         originalColor = image.color;
     }
 
-    public void Setup()
+    public void Setup(Pokemon pokemon)
     {
-        Pokemon = new Pokemon(_base, level);
+        Pokemon = pokemon;
         if (isPlayerUnit)
             image.sprite = Pokemon.Base.BackSprite;
         else
             image.sprite = Pokemon.Base.FrontSprite;
 
+        hud.SetData(pokemon);
+
+        image.color = originalColor;
         PlayerEnterAnimation();
     }
 

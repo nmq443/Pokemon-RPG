@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,11 +14,13 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    public event Action OnEncountered;
+
     private void Awake() {
         animator = GetComponent<Animator>();
     }
 
-    private void Update() {
+    public void HandleUpdate() {
         if(!isMoving) {
             input.x = Input.GetAxisRaw("Horizontal");
             input.y = Input.GetAxisRaw("Vertical");
@@ -60,9 +63,10 @@ public class PlayerController : MonoBehaviour
     }
 
     private void CheckForEncounters() {
-        if (Physics2D.OverlapCircle(transform.position, 0.3f, longGrassLayer) != null) {
-            if (Random.Range(1, 101) <= 10) {
-                Debug.Log("Encounterd a random pokemon!");
+        if (Physics2D.OverlapCircle(transform.position, 0.2f, longGrassLayer) != null) {
+            if (UnityEngine.Random.Range(1, 101) <= 10) {
+                animator.SetBool("isMoving", false);
+                OnEncountered();    
             }
         }
     }
