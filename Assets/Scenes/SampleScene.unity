@@ -10483,15 +10483,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pokemons:
-  - _base: {fileID: 11400000, guid: 2d2e9e1b6b2eff442919a478d59cb2bb, type: 2}
-    level: 7
+  - _base: {fileID: 11400000, guid: cd00639de90b89b4fb98f19dc947f5bb, type: 2}
+    level: 10
   - _base: {fileID: 11400000, guid: db555b0f23365ce42bcc3f28ad048f25, type: 2}
     level: 3
   - _base: {fileID: 11400000, guid: db555b0f23365ce42bcc3f28ad048f25, type: 2}
     level: 2
   - _base: {fileID: 11400000, guid: db555b0f23365ce42bcc3f28ad048f25, type: 2}
     level: 5
-  - _base: {fileID: 11400000, guid: db555b0f23365ce42bcc3f28ad048f25, type: 2}
+  - _base: {fileID: 11400000, guid: 2d2e9e1b6b2eff442919a478d59cb2bb, type: 2}
     level: 6
 --- !u!1 &2130969235
 GameObject:

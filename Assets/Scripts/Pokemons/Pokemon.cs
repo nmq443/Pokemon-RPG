@@ -34,6 +34,10 @@ public class Pokemon
 
     public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
 
+    public Condition Status { get; set; }
+
+    public bool HpChanged { get; set; }
+
     public void Init() 
     {
         // Generate moves
@@ -119,6 +123,12 @@ public class Pokemon
         get { return GetStat(Stat.Speed); }
     }
 
+    public void UpdateHP(int damage)
+    {
+        HP = Mathf.Clamp(HP - damage, 0, MaxHp);
+        HpChanged = true;
+    }
+
     public DamageDetails TakeDamage(Move move, Pokemon attacker)
     {
         float critical = 1f;
@@ -141,14 +151,16 @@ public class Pokemon
         float a = (2 * attacker.Level + 10) / 250f;
         float d = a * move.Base.Power * ((float)attack / defense) + 2;
         int damage = Mathf.FloorToInt(d * modifiers);
-        HP -= damage;
 
-        if (HP <= 0)
-        {
-            HP = 0;
-            damageDetails.Fainted = true;
-        }
+        UpdateHP(damage);
+
         return damageDetails;
+    }
+
+    public void SetStatus(ConditionID conditionID)
+    {
+        Status = ConditionDB.Conditions[conditionID];
+        StatusChanges.Enqueue($"{Base.Name} {Status.StartMessage}");
     }
 
     public Move GetRandomMove()
@@ -176,6 +188,11 @@ public class Pokemon
     public void OnBattleOver()
     {
         ResetStatBoost();
+    }
+
+    public void OnAfterTurn()
+    {
+        Status?.OnAfterTurn?.Invoke(this);
     }
 }
 
