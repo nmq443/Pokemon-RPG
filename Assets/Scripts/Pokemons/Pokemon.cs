@@ -35,6 +35,7 @@ public class Pokemon
     public Queue<string> StatusChanges { get; private set; } = new Queue<string>();
 
     public Condition Status { get; set; }
+    public int StatusTime { get; set; }
 
     public bool HpChanged { get; set; }
 
@@ -160,6 +161,7 @@ public class Pokemon
     public void SetStatus(ConditionID conditionID)
     {
         Status = ConditionDB.Conditions[conditionID];
+        Status?.OnStart?.Invoke(this);
         StatusChanges.Enqueue($"{Base.Name} {Status.StartMessage}");
     }
 
@@ -185,6 +187,15 @@ public class Pokemon
         }
     }
 
+    public bool OnBeforeMove()
+    {
+        if (Status?.OnBeforeMove != null)
+        {
+            return Status.OnBeforeMove(this);
+        }
+        return true;
+    }
+
     public void OnBattleOver()
     {
         ResetStatBoost();
@@ -193,6 +204,11 @@ public class Pokemon
     public void OnAfterTurn()
     {
         Status?.OnAfterTurn?.Invoke(this);
+    }
+
+    public void CureStatus()
+    {
+        Status = null;
     }
 }
 
